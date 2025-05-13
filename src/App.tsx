@@ -96,7 +96,7 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
   }, [currentIndex, text, isPaused]);
 
   return (
-    <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
+    <p className="text-gray-600 text-base max-w-md mx-auto leading-relaxed">
       {displayText}
       <span className="animate-blink">|</span>
     </p>
@@ -111,19 +111,28 @@ const CallToAction: React.FC = () => (
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#f8485e]/10 rounded-full blur-3xl animate-pulse"></div>
     </div>
 
+    {/* Heart Image */}
+    <div className="w-32 h-32 mx-auto mb-6 transform hover:scale-110 transition-transform duration-300">
+      <img 
+        src="/assets/heart.png" 
+        alt="Heart" 
+        className="w-full h-full object-contain drop-shadow-lg"
+      />
+    </div>
+
     {/* Main content with hover effects */}
     <div className="transform transition-all duration-300 hover:scale-105">
-      <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent animate-gradient">
+      <h2 className="text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent animate-gradient">
         Give Me a Call
       </h2>
-      <p className="text-2xl text-gray-300 font-light tracking-wide hover:text-white transition-colors duration-300">
+      <p className="text-2xl text-gray-600 font-light tracking-wide hover:text-gray-800 transition-colors duration-300">
         Your AI Assistant is All Ears
       </p>
     </div>
 
     {/* Animated separator */}
     <div className="w-24 h-0.5 bg-gradient-to-r from-[#f8485e]/50 to-[#ff6b6b]/50 mx-auto mt-8 mb-6 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-800 to-transparent animate-shimmer"></div>
     </div>
 
     {/* Description with enhanced styling */}
@@ -497,7 +506,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-800 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Background droplets */}
       {droplets.map((droplet, index) => (
         <Droplet key={index} data={droplet} />
@@ -520,23 +529,23 @@ const App: React.FC = () => {
                 />
               </div>
 
-              <h1 className="text-4xl font-bold text-white mb-2">
+              <h1 className="text-4xl font-bold text-gray-800 mb-2">
                 <span className="text-[#f8485e]">Devoteam</span> Voice
               </h1>
-              <p className="text-gray-400">AI Assistant</p>
+              <p className="text-gray-600">AI Assistant</p>
             </div>
             
             {/* Error Message */}
             {error && (
               <div className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded-lg backdrop-blur-sm">
-                <p className="text-white">{error}</p>
+                <p className="text-red-600">{error}</p>
               </div>
             )}
 
             {/* Microphone Permission Status */}
             {isMicPermissionGranted === false && (
               <div className="mb-4 p-4 bg-[#f8485e]/20 border border-[#f8485e] rounded-lg backdrop-blur-sm">
-                <p className="text-white">Microphone access is required. Please allow microphone access in your browser settings.</p>
+                <p className="text-[#f8485e]">Microphone access is required. Please allow microphone access in your browser settings.</p>
               </div>
             )}
             
@@ -561,7 +570,7 @@ const App: React.FC = () => {
               >
                 <div className="flex items-center justify-center h-full">
                   <span className="text-white text-lg font-semibold">
-                    {isListening ? 'Stop' : 'Start'}
+                    {isListening ? 'Stop' : 'Help!'}
                   </span>
                 </div>
               </button>
@@ -570,33 +579,33 @@ const App: React.FC = () => {
 
             {/* User's Voice Waveform */}
             {isListening && (
-              <div className="mt-8 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-                <p className="text-white text-sm mb-2 font-medium">Your Voice</p>
+              <div className="mt-8 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
+                <p className="text-gray-800 text-sm mb-2 font-medium">Your Voice</p>
                 <Waveform volume={userVolume} />
               </div>
             )}
 
             {/* Agent's Voice Waveform */}
             {isListening && (
-              <div className="mt-4 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-                <p className="text-white text-sm mb-2 font-medium">Assistant's Voice</p>
+              <div className="mt-4 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
+                <p className="text-gray-800 text-sm mb-2 font-medium">Assistant's Voice</p>
                 <Waveform volume={volume} />
               </div>
             )}
 
             {/* Transcript */}
             {transcript && (
-              <div className="mt-8 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-                <h2 className="text-white text-lg font-semibold mb-2">You said:</h2>
-                <p className="text-gray-300">{transcript}</p>
+              <div className="mt-8 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
+                <h2 className="text-gray-800 text-lg font-semibold mb-2">You said:</h2>
+                <p className="text-gray-600">{transcript}</p>
               </div>
             )}
 
             {/* Response */}
             {response && (
-              <div className="mt-4 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-                <h2 className="text-white text-lg font-semibold mb-2">Response:</h2>
-                <p className="text-gray-300">{response}</p>
+              <div className="mt-4 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
+                <h2 className="text-gray-800 text-lg font-semibold mb-2">Response:</h2>
+                <p className="text-gray-600">{response}</p>
               </div>
             )}
           </div>
