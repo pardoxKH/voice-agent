@@ -126,7 +126,7 @@ const CallToAction: React.FC = () => (
         Give Me a Call
       </h2>
       <p className="text-2xl text-gray-600 font-light tracking-wide hover:text-gray-800 transition-colors duration-300">
-        Your AI Assistant is All Ears
+        Your <b>Health Agent</b> is All Ears
       </p>
     </div>
 
@@ -138,7 +138,7 @@ const CallToAction: React.FC = () => (
     {/* Description with enhanced styling */}
     <div className="relative group">
       <div className="absolute inset-0 bg-gradient-to-r from-[#f8485e]/5 to-[#ff6b6b]/5 rounded-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
-      <TypewriterText text="This AI assistant helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
+      <TypewriterText text="This Health Agent helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
     </div>
   </div>
 );
@@ -153,10 +153,10 @@ const Arrow: React.FC<{ className?: string; direction: 'left' | 'right' }> = ({ 
   return (
     <div className={`absolute ${className}`}>
       <div className="relative w-12 h-12">
-        <div className="absolute inset-0 border-2 border-white/30 rounded-full animate-ping opacity-75"></div>
+        <div className="absolute inset-0 border-2 border-gray-300 rounded-full animate-ping opacity-75"></div>
         <div className={`absolute inset-0 flex items-center justify-center ${rotation}`}>
           <svg 
-            className="w-8 h-8 text-white animate-bounce" 
+            className="w-8 h-8 text-gray-800 animate-bounce" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -532,7 +532,7 @@ const App: React.FC = () => {
               <h1 className="text-4xl font-bold text-gray-800 mb-2">
                 <span className="text-[#f8485e]">Devoteam</span> Voice
               </h1>
-              <p className="text-gray-600">AI Assistant</p>
+              <p className="text-gray-600">Health Agent</p>
             </div>
             
             {/* Error Message */}
