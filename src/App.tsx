@@ -122,8 +122,21 @@ const CallToAction: React.FC = () => (
 
     {/* Main content with hover effects */}
     <div className="transform transition-all duration-300 hover:scale-105">
-      <h2 className="text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent animate-gradient">
+      <h2 className="text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent animate-gradient flex items-center justify-center gap-3">
         Give Me a Call
+        <svg 
+          className="w-8 h-8 text-[#f8485e] animate-vibrate" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+          />
+        </svg>
       </h2>
       <p className="text-2xl text-gray-600 font-light tracking-wide hover:text-gray-800 transition-colors duration-300">
         Your <b>Health Agent</b> is All Ears
@@ -191,6 +204,14 @@ const styles = `
   100% { transform: translateX(100%); }
 }
 
+@keyframes vibrate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
@@ -207,6 +228,10 @@ const styles = `
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
+}
+
+.animate-vibrate {
+  animation: vibrate 0.5s ease-in-out infinite;
 }
 
 @keyframes gradient {
