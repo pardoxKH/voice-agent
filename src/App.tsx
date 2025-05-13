@@ -105,17 +105,116 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
 
 // Call to Action component
 const CallToAction: React.FC = () => (
-  <div className="text-center mb-12">
-    <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent">
-      Give Me a Call
-    </h2>
-    <p className="text-2xl text-gray-300 font-light tracking-wide">
-      Your AI Assistant is All Ears
-    </p>
-    <div className="w-24 h-0.5 bg-gradient-to-r from-[#f8485e]/50 to-[#ff6b6b]/50 mx-auto mt-8 mb-6"></div>
-    <TypewriterText text="This AI assistant helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
+  <div className="text-center mb-12 relative">
+    {/* Animated background elements */}
+    <div className="absolute inset-0 -z-10">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#f8485e]/10 rounded-full blur-3xl animate-pulse"></div>
+    </div>
+
+    {/* Main content with hover effects */}
+    <div className="transform transition-all duration-300 hover:scale-105">
+      <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent animate-gradient">
+        Give Me a Call
+      </h2>
+      <p className="text-2xl text-gray-300 font-light tracking-wide hover:text-white transition-colors duration-300">
+        Your AI Assistant is All Ears
+      </p>
+    </div>
+
+    {/* Animated separator */}
+    <div className="w-24 h-0.5 bg-gradient-to-r from-[#f8485e]/50 to-[#ff6b6b]/50 mx-auto mt-8 mb-6 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer"></div>
+    </div>
+
+    {/* Description with enhanced styling */}
+    <div className="relative group">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#f8485e]/5 to-[#ff6b6b]/5 rounded-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+      <TypewriterText text="This AI assistant helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
+    </div>
+
+    {/* Floating elements */}
+    <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#f8485e]/20 rounded-full animate-float"></div>
+    <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-[#ff6b6b]/20 rounded-full animate-float-delayed"></div>
   </div>
 );
+
+// Arrow component
+const Arrow: React.FC<{ className?: string; direction: 'left' | 'right' }> = ({ className, direction }) => {
+  const rotation = {
+    left: 'rotate-90',
+    right: '-rotate-90'
+  }[direction];
+
+  return (
+    <div className={`absolute ${className}`}>
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 border-2 border-white/30 rounded-full animate-ping opacity-75"></div>
+        <div className={`absolute inset-0 flex items-center justify-center ${rotation}`}>
+          <svg 
+            className="w-8 h-8 text-white animate-bounce" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Add these styles to your CSS or Tailwind config
+const styles = `
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+`;
+
+// Add the styles to the document
+const styleSheet = document.createElement("style");
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
 
 const App: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
@@ -436,8 +535,16 @@ const App: React.FC = () => {
               </div>
             )}
             
-            {/* Orb Button with Loading State */}
+            {/* Orb Button with Loading State and Arrows */}
             <div className="relative">
+              {/* Arrows pointing to the button */}
+              {!isListening && !response && (
+                <>
+                  <Arrow className="top-1/2 -left-20 -translate-y-1/2" direction="right" />
+                  <Arrow className="top-1/2 -right-20 -translate-y-1/2" direction="left" />
+                </>
+              )}
+              
               <button
                 onClick={toggleListening}
                 disabled={isLoading}
