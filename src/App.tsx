@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Vapi from '@vapi-ai/web';
 
-// Replace these with your actual values from the VAPI dashboard
-// You can find these at https://vapi.ai/dashboard
+// Get VAPI credentials from environment variables
 const ASSISTANT_ID = '767fa3d4-7d4f-41ac-89e1-2dfd6032cdb0';
 // const ASSISTANT_ID = 'e8888280-a21f-4ba5-ba69-bd5bc845a409';
 const PUBLIC_KEY = 'e012973f-8a4e-4af2-911b-3e585c93c783';
@@ -66,6 +65,55 @@ const LoadingRings: React.FC = () => (
       <div className="absolute inset-0 border-2 border-[#f8485e] rounded-full animate-ping opacity-50" style={{ animationDelay: '0.5s' }}></div>
       <div className="absolute inset-0 border-2 border-[#f8485e] rounded-full animate-ping opacity-25" style={{ animationDelay: '1s' }}></div>
     </div>
+  </div>
+);
+
+// TypewriterText component
+const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) {
+      const pauseTimeout = setTimeout(() => {
+        setIsPaused(false);
+        setDisplayText('');
+        setCurrentIndex(0);
+      }, 2000); // Pause for 2 seconds before restarting
+      return () => clearTimeout(pauseTimeout);
+    }
+
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 50); // Typing speed
+      return () => clearTimeout(timeout);
+    } else {
+      setIsPaused(true);
+    }
+  }, [currentIndex, text, isPaused]);
+
+  return (
+    <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
+      {displayText}
+      <span className="animate-blink">|</span>
+    </p>
+  );
+};
+
+// Call to Action component
+const CallToAction: React.FC = () => (
+  <div className="text-center mb-12">
+    <h2 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent">
+      Give Me a Call
+    </h2>
+    <p className="text-2xl text-gray-300 font-light tracking-wide">
+      Your AI Assistant is All Ears
+    </p>
+    <div className="w-24 h-0.5 bg-gradient-to-r from-[#f8485e]/50 to-[#ff6b6b]/50 mx-auto mt-8 mb-6"></div>
+    <TypewriterText text="This AI assistant helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
   </div>
 );
 
@@ -354,89 +402,92 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden bg-black">
-      {/* Animated droplets */}
-      <div className="absolute inset-0 overflow-hidden">
-        {droplets.map((data, index) => (
-          <Droplet key={index} data={data} />
-        ))}
-      </div>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Background droplets */}
+      {droplets.map((droplet, index) => (
+        <Droplet key={index} data={droplet} />
+      ))}
 
-      {/* Content */}
-      <div className="relative max-w-md w-full space-y-8 z-10">
-        <div className="text-center">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-white mb-2">
-              <span className="text-[#f8485e]">Devoteam</span> Voice
-            </h1>
-            <p className="text-gray-400">AI Assistant</p>
-          </div>
-          
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded-lg backdrop-blur-sm">
-              <p className="text-white">{error}</p>
-            </div>
-          )}
+      <div className="z-10 w-full max-w-2xl mx-auto">
+        {/* Content */}
+        <div className="relative max-w-md w-full space-y-8 z-10 mx-auto">
+          <div className="text-center">
+            {/* Show CTA when not listening */}
+            {!isListening && !response && <CallToAction />}
 
-          {/* Microphone Permission Status */}
-          {isMicPermissionGranted === false && (
-            <div className="mb-4 p-4 bg-[#f8485e]/20 border border-[#f8485e] rounded-lg backdrop-blur-sm">
-              <p className="text-white">Microphone access is required. Please allow microphone access in your browser settings.</p>
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold text-white mb-2">
+                <span className="text-[#f8485e]">Devoteam</span> Voice
+              </h1>
+              <p className="text-gray-400">AI Assistant</p>
             </div>
-          )}
-          
-          {/* Orb Button with Loading State */}
-          <div className="relative">
-            <button
-              onClick={toggleListening}
-              disabled={isLoading}
-              className={`w-32 h-32 rounded-full transition-all duration-300 transform hover:scale-105 ${
-                isListening
-                  ? 'bg-[#f8485e] animate-pulse shadow-lg shadow-[#f8485e]/50'
-                  : 'bg-[#f8485e] hover:bg-[#f8485e]/90 shadow-lg'
-              } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              <div className="flex items-center justify-center h-full">
-                <span className="text-white text-lg font-semibold">
-                  {isListening ? 'Stop' : 'Start'}
-                </span>
+            
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded-lg backdrop-blur-sm">
+                <p className="text-white">{error}</p>
               </div>
-            </button>
-            {isLoading && <LoadingRings />}
+            )}
+
+            {/* Microphone Permission Status */}
+            {isMicPermissionGranted === false && (
+              <div className="mb-4 p-4 bg-[#f8485e]/20 border border-[#f8485e] rounded-lg backdrop-blur-sm">
+                <p className="text-white">Microphone access is required. Please allow microphone access in your browser settings.</p>
+              </div>
+            )}
+            
+            {/* Orb Button with Loading State */}
+            <div className="relative">
+              <button
+                onClick={toggleListening}
+                disabled={isLoading}
+                className={`w-32 h-32 rounded-full transition-all duration-300 transform hover:scale-105 ${
+                  isListening
+                    ? 'bg-[#f8485e] animate-pulse shadow-lg shadow-[#f8485e]/50'
+                    : 'bg-[#f8485e] hover:bg-[#f8485e]/90 shadow-lg'
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <div className="flex items-center justify-center h-full">
+                  <span className="text-white text-lg font-semibold">
+                    {isListening ? 'Stop' : 'Start'}
+                  </span>
+                </div>
+              </button>
+              {isLoading && <LoadingRings />}
+            </div>
+
+            {/* User's Voice Waveform */}
+            {isListening && (
+              <div className="mt-8 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
+                <p className="text-white text-sm mb-2 font-medium">Your Voice</p>
+                <Waveform volume={userVolume} />
+              </div>
+            )}
+
+            {/* Agent's Voice Waveform */}
+            {isListening && (
+              <div className="mt-4 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
+                <p className="text-white text-sm mb-2 font-medium">Assistant's Voice</p>
+                <Waveform volume={volume} />
+              </div>
+            )}
+
+            {/* Transcript */}
+            {transcript && (
+              <div className="mt-8 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
+                <h2 className="text-white text-lg font-semibold mb-2">You said:</h2>
+                <p className="text-gray-300">{transcript}</p>
+              </div>
+            )}
+
+            {/* Response */}
+            {response && (
+              <div className="mt-4 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
+                <h2 className="text-white text-lg font-semibold mb-2">Response:</h2>
+                <p className="text-gray-300">{response}</p>
+              </div>
+            )}
           </div>
-
-          {/* User's Voice Waveform */}
-          {isListening && (
-            <div className="mt-8 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-              <p className="text-white text-sm mb-2 font-medium">Your Voice</p>
-              <Waveform volume={userVolume} />
-            </div>
-          )}
-
-          {/* Agent's Voice Waveform */}
-          {isListening && (
-            <div className="mt-4 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-              <p className="text-white text-sm mb-2 font-medium">Assistant's Voice</p>
-              <Waveform volume={volume} />
-            </div>
-          )}
-
-          {/* Transcript */}
-          {transcript && (
-            <div className="mt-8 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-              <h2 className="text-white text-lg font-semibold mb-2">You said:</h2>
-              <p className="text-gray-300">{transcript}</p>
-            </div>
-          )}
-
-          {/* Response */}
-          {response && (
-            <div className="mt-4 p-4 bg-[#2A2A2A]/80 rounded-lg border border-[#3A3A3A] backdrop-blur-sm">
-              <h2 className="text-white text-lg font-semibold mb-2">Response:</h2>
-              <p className="text-gray-300">{response}</p>
-            </div>
-          )}
         </div>
       </div>
     </div>
