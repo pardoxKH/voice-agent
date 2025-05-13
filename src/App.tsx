@@ -131,10 +131,6 @@ const CallToAction: React.FC = () => (
       <div className="absolute inset-0 bg-gradient-to-r from-[#f8485e]/5 to-[#ff6b6b]/5 rounded-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
       <TypewriterText text="This AI assistant helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
     </div>
-
-    {/* Floating elements */}
-    <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#f8485e]/20 rounded-full animate-float"></div>
-    <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-[#ff6b6b]/20 rounded-full animate-float-delayed"></div>
   </div>
 );
 
@@ -515,6 +511,15 @@ const App: React.FC = () => {
             {!isListening && !response && <CallToAction />}
 
             <div className="mb-8">
+              {/* Patient GIF */}
+              <div className="w-64 h-64 mx-auto mb-8 transform hover:scale-105 transition-transform duration-300">
+                <img 
+                  src="/assets/patient.gif" 
+                  alt="Patient illustration" 
+                  className="w-full h-full object-contain drop-shadow-2xl"
+                />
+              </div>
+
               <h1 className="text-4xl font-bold text-white mb-2">
                 <span className="text-[#f8485e]">Devoteam</span> Voice
               </h1>
