@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Vapi from '@vapi-ai/web';
 
 // Get VAPI credentials from environment variables
-const ASSISTANT_ID = '767fa3d4-7d4f-41ac-89e1-2dfd6032cdb0';
+const ASSISTANT_ID = 'c88b659c-ffa5-4fde-bda0-be2bcab930d2';
 // const ASSISTANT_ID = 'e8888280-a21f-4ba5-ba69-bd5bc845a409';
 const PUBLIC_KEY = 'e012973f-8a4e-4af2-911b-3e585c93c783';
 
@@ -22,7 +22,7 @@ const droplets = generateDroplets(50);
 // Droplet component
 const Droplet: React.FC<{ data: typeof droplets[0] }> = ({ data }) => (
   <div
-    className="absolute w-1 h-1 bg-[#f8485e] rounded-full opacity-30 animate-droplet"
+    className="absolute w-1 h-1 bg-[#009ddc] rounded-full opacity-30 animate-droplet"
     style={{
       animationDelay: `${data.delay}s`,
       animationDuration: `${data.duration}s`,
@@ -41,7 +41,7 @@ const Waveform: React.FC<{ volume: number }> = ({ volume }) => {
     return (
       <div
         key={i}
-        className="w-1 bg-[#f8485e] rounded-full transition-all duration-100"
+        className="w-1 bg-[#009ddc] rounded-full transition-all duration-100"
         style={{
           height: `${Math.max(5, barHeight)}px`,
           opacity: 0.5 + (volume * 0.5),
@@ -61,15 +61,18 @@ const Waveform: React.FC<{ volume: number }> = ({ volume }) => {
 const LoadingRings: React.FC = () => (
   <div className="absolute inset-0 flex items-center justify-center">
     <div className="w-24 h-24 relative">
-      <div className="absolute inset-0 border-2 border-[#f8485e] rounded-full animate-ping opacity-75"></div>
-      <div className="absolute inset-0 border-2 border-[#f8485e] rounded-full animate-ping opacity-50" style={{ animationDelay: '0.5s' }}></div>
-      <div className="absolute inset-0 border-2 border-[#f8485e] rounded-full animate-ping opacity-25" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute inset-0 border-2 border-[#009ddc] rounded-full animate-ping opacity-75"></div>
+      <div className="absolute inset-0 border-2 border-[#009ddc] rounded-full animate-ping opacity-50" style={{ animationDelay: '0.5s' }}></div>
+      <div className="absolute inset-0 border-2 border-[#009ddc] rounded-full animate-ping opacity-25" style={{ animationDelay: '1s' }}></div>
     </div>
   </div>
 );
 
 // TypewriterText component
-const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
+const TypewriterText: React.FC<{ text?: string }> = ({ text }) => {
+  // Arabic paragraph as default
+  const defaultText = `سعود هو مساعد صوتي يعمل لدى وزارة الموارد البشرية والتنمية الاجتماعية، ويهدف إلى تسهيل وصولك إلى المعلومات والخدمات التي تقدمها الوزارة.\n\nيمكنك التحدث مع سعود وطرح أي سؤال يخص خدمات الوزارة، مثل:\n\n- شروط التقديم على البرامج\n- الاستفسار عن الترقية أو التوظيف\n- تفاصيل الضمان الاجتماعي أو الدعم السكني\n- أو أي خدمة أخرى تقدمها الوزارة.`;
+  const rtlText = (text || defaultText);
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -84,19 +87,19 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
       return () => clearTimeout(pauseTimeout);
     }
 
-    if (currentIndex < text.length) {
+    if (currentIndex < rtlText.length) {
       const timeout = setTimeout(() => {
-        setDisplayText(prev => prev + text[currentIndex]);
+        setDisplayText(prev => prev + rtlText[currentIndex]);
         setCurrentIndex(prev => prev + 1);
       }, 50); // Typing speed
       return () => clearTimeout(timeout);
     } else {
       setIsPaused(true);
     }
-  }, [currentIndex, text, isPaused]);
+  }, [currentIndex, rtlText, isPaused]);
 
   return (
-    <p className="text-gray-600 text-base max-w-md mx-auto leading-relaxed">
+    <p className="text-[#3a9247] text-base max-w-md mx-auto leading-relaxed" dir="rtl" style={{textAlign: 'right'}}>
       {displayText}
       <span className="animate-blink">|</span>
     </p>
@@ -108,7 +111,7 @@ const CallToAction: React.FC = () => (
   <div className="text-center mb-12 relative">
     {/* Animated background elements */}
     <div className="absolute inset-0 -z-10">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#f8485e]/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#009ddc]/10 rounded-full blur-3xl animate-pulse"></div>
     </div>
 
     {/* Heart Image */}
@@ -122,36 +125,38 @@ const CallToAction: React.FC = () => (
 
     {/* Main content with hover effects */}
     <div className="transform transition-all duration-300 hover:scale-105">
-      <h2 className="text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-[#f8485e] to-[#ff6b6b] bg-clip-text text-transparent animate-gradient flex items-center justify-center gap-3">
-        Give Me a Call
-        <svg 
-          className="w-8 h-8 text-[#f8485e] animate-vibrate" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-          />
-        </svg>
+      <h2 className="text-4xl font-bold text-[#2a2d34] mb-4 bg-gradient-to-r from-[#009ddc] via-[#f26430] to-[#009b72] bg-clip-text text-transparent animate-gradient flex items-center justify-center gap-3" dir="rtl">
+        <span className="flex items-center gap-2">
+          <svg 
+            className="w-8 h-8 text-[#3a9247] animate-vibrate" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+            />
+          </svg>
+          <span>دق علي</span>
+        </span>
       </h2>
-      <p className="text-2xl text-gray-600 font-light tracking-wide hover:text-gray-800 transition-colors duration-300">
-        Your <b>Health Agent</b> is All Ears
+      <p className="text-2xl text-[#3a9247] font-light tracking-wide hover:text-[#2a2d34] transition-colors duration-300 text-center" dir="rtl">
+        <b>سعود٫</b> مساعدك الافتراضي من وزارة الموارد البشرية
       </p>
     </div>
 
     {/* Animated separator */}
-    <div className="w-24 h-0.5 bg-gradient-to-r from-[#f8485e]/50 to-[#ff6b6b]/50 mx-auto mt-8 mb-6 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-800 to-transparent animate-shimmer"></div>
+    <div className="w-24 h-0.5 bg-gradient-to-r from-[#009ddc]/50 via-[#f26430]/50 to-[#009b72]/50 mx-auto mt-8 mb-6 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#2a2d34] to-transparent animate-shimmer"></div>
     </div>
 
     {/* Description with enhanced styling */}
-    <div className="relative group">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#f8485e]/5 to-[#ff6b6b]/5 rounded-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
-      <TypewriterText text="This Health Agent helps provide preliminary diagnoses, book appointments, and support people who call the hospital — and it can even tell jokes when you need a smile 😉" />
+    <div className="relative group min-h-[220px] flex items-center">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#009ddc]/5 via-[#f26430]/5 to-[#009b72]/5 rounded-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+      <TypewriterText />
     </div>
   </div>
 );
@@ -531,7 +536,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#f7fafd] text-[#2a2d34] flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Background droplets */}
       {droplets.map((droplet, index) => (
         <Droplet key={index} data={droplet} />
@@ -545,32 +550,23 @@ const App: React.FC = () => {
             {!isListening && !response && <CallToAction />}
 
             <div className="mb-8">
-              {/* Patient GIF */}
-              <div className="w-64 h-64 mx-auto mb-8 transform hover:scale-105 transition-transform duration-300">
-                <img 
-                  src="/assets/patient.gif" 
-                  alt="Patient illustration" 
-                  className="w-full h-full object-contain drop-shadow-2xl"
-                />
-              </div>
-
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                <span className="text-[#f8485e]">Devoteam</span> Voice
+              <h1 className="text-4xl font-bold text-[#2a2d34] mb-2">
+                <span className="text-[#3a9247]">MHRSD</span> Voice
               </h1>
-              <p className="text-gray-600">Health Agent</p>
+              <p className="text-[#2a2d34]">HR Agent</p>
             </div>
             
             {/* Error Message */}
             {error && (
-              <div className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded-lg backdrop-blur-sm">
-                <p className="text-red-600">{error}</p>
+              <div className="mb-4 p-4 bg-[#f26430]/10 border border-[#f26430] rounded-lg backdrop-blur-sm">
+                <p className="text-[#2a2d34]">{error}</p>
               </div>
             )}
 
             {/* Microphone Permission Status */}
             {isMicPermissionGranted === false && (
-              <div className="mb-4 p-4 bg-[#f8485e]/20 border border-[#f8485e] rounded-lg backdrop-blur-sm">
-                <p className="text-[#f8485e]">Microphone access is required. Please allow microphone access in your browser settings.</p>
+              <div className="mb-4 p-4 bg-[#009ddc]/10 border border-[#009ddc] rounded-lg backdrop-blur-sm">
+                <p className="text-[#2a2d34]">Microphone access is required. Please allow microphone access in your browser settings.</p>
               </div>
             )}
             
@@ -589,13 +585,13 @@ const App: React.FC = () => {
                 disabled={isLoading}
                 className={`w-32 h-32 rounded-full transition-all duration-300 transform hover:scale-105 ${
                   isListening
-                    ? 'bg-[#f8485e] animate-pulse shadow-lg shadow-[#f8485e]/50'
-                    : 'bg-[#f8485e] hover:bg-[#f8485e]/90 shadow-lg'
+                    ? 'bg-[#3a9247] animate-pulse shadow-lg shadow-[#3a9247]/50'
+                    : 'bg-[#3a9247] hover:bg-[#3a9247]/90 shadow-lg'
                 } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-center justify-center h-full">
                   <span className="text-white text-lg font-semibold">
-                    {isListening ? 'Stop' : 'Help!'}
+                    {isListening ? 'Stop' : '!كلمني'}
                   </span>
                 </div>
               </button>
@@ -604,33 +600,33 @@ const App: React.FC = () => {
 
             {/* User's Voice Waveform */}
             {isListening && (
-              <div className="mt-8 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
-                <p className="text-gray-800 text-sm mb-2 font-medium">Your Voice</p>
+              <div className="mt-8 p-4 bg-white rounded-lg border border-[#009ddc] backdrop-blur-sm">
+                <p className="text-[#2a2d34] text-sm mb-2 font-medium">Your Voice</p>
                 <Waveform volume={userVolume} />
               </div>
             )}
 
             {/* Agent's Voice Waveform */}
             {isListening && (
-              <div className="mt-4 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
-                <p className="text-gray-800 text-sm mb-2 font-medium">Assistant's Voice</p>
+              <div className="mt-4 p-4 bg-white rounded-lg border border-[#009ddc] backdrop-blur-sm">
+                <p className="text-[#2a2d34] text-sm mb-2 font-medium">Assistant's Voice</p>
                 <Waveform volume={volume} />
               </div>
             )}
 
             {/* Transcript */}
             {transcript && (
-              <div className="mt-8 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
-                <h2 className="text-gray-800 text-lg font-semibold mb-2">You said:</h2>
-                <p className="text-gray-600">{transcript}</p>
+              <div className="mt-8 p-4 bg-white rounded-lg border border-[#009ddc] backdrop-blur-sm">
+                <h2 className="text-[#2a2d34] text-lg font-semibold mb-2">You said:</h2>
+                <p className="text-[#2a2d34]">{transcript}</p>
               </div>
             )}
 
             {/* Response */}
             {response && (
-              <div className="mt-4 p-4 bg-gray-100/80 rounded-lg border border-gray-200 backdrop-blur-sm">
-                <h2 className="text-gray-800 text-lg font-semibold mb-2">Response:</h2>
-                <p className="text-gray-600">{response}</p>
+              <div className="mt-4 p-4 bg-white rounded-lg border border-[#009ddc] backdrop-blur-sm">
+                <h2 className="text-[#2a2d34] text-lg font-semibold mb-2">Response:</h2>
+                <p className="text-[#2a2d34]">{response}</p>
               </div>
             )}
           </div>
